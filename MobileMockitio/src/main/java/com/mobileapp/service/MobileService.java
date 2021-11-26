@@ -14,10 +14,10 @@ public class MobileService implements IMobileService {
 	 * 
 	 */
 
-	private List<Mobile> mobileList = Arrays.asList(new Mobile(1, "Samsung", "K42", 32000),
+	private List<Mobile> mobileList = Arrays.asList(new Mobile(1, "Apple", "K42", 32000),
 			new Mobile(2, "Xiaomi", "L42", 66000), new Mobile(3, "realme", "M42", 42000),
 			new Mobile(4, "Xiaomi", "I43", 40000), new Mobile(5, "Xiaomi", "L98", 70000),
-			new Mobile(6, "Samsung", "Z32", 83000));
+			new Mobile(6, "Apple", "Z32", 83000));
 
 	public List<Mobile> showMobiles() {
 		Collections.sort(mobileList, (mobile1, mobile2) -> {

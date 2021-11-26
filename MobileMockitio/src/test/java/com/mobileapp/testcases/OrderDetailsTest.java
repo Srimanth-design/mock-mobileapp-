@@ -24,98 +24,130 @@ import com.mobileapp.model.Mobile;
 import com.mobileapp.service.IMobileService;
 import com.mobileapp.service.OrderDetails;
 
-
 @ExtendWith(MockitoExtension.class)
 @RunWith(JUnitPlatform.class)
 class OrderDetailsTest {
-	
+
 	@Mock
 	IMobileService mobileService;
-	
+
 //	create an object of orderDetails
 	@InjectMocks
 	OrderDetails orderDetails;
 	Mobile mobile1, mobile2, mobile3, mobile4, mobile5, mobile6;
-	
+
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 	}
 
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	@AfterAll
 	static void tearDownAfterClass() throws Exception {
 	}
 
+	/**
+	 * 
+	 * @throws Exception
+	 */
+
 	@BeforeEach
 	void setUp() throws Exception {
 		mobile1 = new Mobile(1, "Samsung", "A53", 26000);
-		mobile2 = new Mobile(2, "Xiaomi", "A3", 16000);
+		mobile2 = new Mobile(2, "Apple", "A3", 16000);
 		mobile3 = new Mobile(3, "realme", "Neo2", 32000);
 		mobile4 = new Mobile(4, "Xiaomi", "3s", 10000);
-		mobile5 = new Mobile(5, "Xiaomi", "4a", 10000);
+		mobile5 = new Mobile(5, "Apple", "4a", 10000);
 		mobile6 = new Mobile(6, "Samsung", "S21", 53000);
 		orderDetails = new OrderDetails();
 		orderDetails.setMobileService(mobileService);
 		List<Mobile> mobileData = Arrays.asList(mobile1, mobile2, mobile3, mobile4, mobile5, mobile6);
 	}
 
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	@AfterEach
 	void tearDown() throws Exception {
 	}
 
+	/**
+	 * 
+	 * @throws MobileNotFoundException
+	 */
 	@Test
 	void testShowMobiles() throws MobileNotFoundException {
-		String brand = "Samsung";
-		List<Mobile> expectedMobiles = Arrays.asList(mobile6, mobile1);
-//		use the proxy object to call the method of IMobileService with when then
-		Mockito.when(mobileService.getByBrand("Samsung"))
-					.thenReturn(Arrays.asList(mobile1, mobile6));
+		String brand = "Apple";
+		List<Mobile> expectedMobiles = Arrays.asList(mobile5, mobile2);
+		// use the proxy object to call the method of IMobileService with when then
+		Mockito.when(mobileService.getByBrand("Apple")).thenReturn(Arrays.asList(mobile2, mobile5));
 		List<Mobile> actualMobileList = orderDetails.showMobiles(brand);
 		assertEquals(expectedMobiles, actualMobileList, "List not equal");
-	
+
 	}
-	
+
+	/**
+	 * 
+	 * @throws MobileNotFoundException
+	 */
+
 	@Test
 	void testshowMobilesInvalid() throws MobileNotFoundException {
-		Mockito.when(mobileService.getByBrand("vivo"))
-			.thenThrow(MobileNotFoundException.class);
+		Mockito.when(mobileService.getByBrand("vivo")).thenThrow(MobileNotFoundException.class);
 		assertThrows(MobileNotFoundException.class, () -> orderDetails.showMobiles("vivo"));
 	}
 	
+	/**
+	 * 
+	 * @throws MobileNotFoundException
+	 */
+
 	@Test
 	void testShowMobilesNull() throws MobileNotFoundException {
 		String brand = "Samsung";
 
-		Mockito.when(mobileService.getByBrand("Samsung"))
-					.thenReturn(null);
-		
+		Mockito.when(mobileService.getByBrand("Samsung")).thenReturn(null);
+
 		List<Mobile> actualMobileList = orderDetails.showMobiles(brand);
 		assertNull(actualMobileList);
-	
+
 	}
 	
+	/**
+	 * 
+	 * @throws MobileNotFoundException
+	 */
+
 	@Test
 	void testShowMobilesEmpty() throws MobileNotFoundException {
 		String brand = "Moto";
-
-		Mockito.when(mobileService.getByBrand("Moto"))
-					.thenReturn(new ArrayList<>());
-		
+		Mockito.when(mobileService.getByBrand("Moto")).thenReturn(new ArrayList<>());
 		List<Mobile> actualMobileList = orderDetails.showMobiles(brand);
 		assertEquals(0, actualMobileList.size(), "List should be empty");
-	
+
 	}
-	
+	/**
+	 * 
+	 * @throws MobileNotFoundException
+	 */
+
 	@Test
 	void testShowMobilesSortByBrand() throws MobileNotFoundException {
 		String brand = "Samsung";
 		List<Mobile> expectedMobiles = Arrays.asList(mobile6, mobile1);
-		
-		Mockito.when(mobileService.getByBrand("Samsung"))
-					.thenReturn(Arrays.asList(mobile1, mobile6));
+
+		Mockito.when(mobileService.getByBrand("Samsung")).thenReturn(Arrays.asList(mobile1, mobile6));
 		List<Mobile> actualMobileList = orderDetails.showMobiles(brand);
-		
+
 		assertEquals(expectedMobiles, actualMobileList, "List not equal");
-	
+
 	}
 
 }
